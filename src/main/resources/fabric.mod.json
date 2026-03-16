@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "invview",
+  "version": "${version}",
+  "name": "invview",
+  "description": "allows you to view other player's inventorys and enderchest",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/invview/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "air.invview.client.InvviewDataGenerator"
+    ],
+    "client": [
+      "air.invview.client.InvviewClient"
+    ],
+    "main": [
+      "air.invview.Invview"
+    ]
+  },
+  "mixins": [
+    "invview.mixins.json",
+    {
+      "config": "invview.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
