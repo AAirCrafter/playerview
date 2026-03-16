@@ -2,7 +2,9 @@ package air.invview.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
@@ -31,5 +33,18 @@ public class Utils {
         });
 
         return players;
+    }
+
+    public static boolean isErrorMsg(Text msg) {
+        TextColor red = TextColor.fromFormatting(Formatting.RED);
+        Style style = msg.getStyle();
+
+        if (style.getColor() != null && style.getColor().equals(red)) return true;
+
+        for (Text sibling : msg.getSiblings()) {
+            if (sibling.getStyle().getColor() != null && sibling.getStyle().getColor().equals(red)) return true;
+        }
+
+        return false;
     }
 }

@@ -5,10 +5,12 @@ import air.invview.client.gui.PlayerInvScreen;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
@@ -44,6 +46,7 @@ public class ChatListener {
     private static int pendingArmor = 0;
     private static int pendingXP = 0;
     private static int pendingHunger = 20;
+    private static String pendingMessage;
 
     private static Step step = Step.INVENTORY;
 
@@ -68,12 +71,13 @@ public class ChatListener {
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
             if (pendingPlayer == null) return true;
 
-            Style style = message.getStyle();
-            if (style.getColor() != null && style.getColor().equals(TextColor.fromFormatting(Formatting.RED))) {
-                Utils.msg("[InvView] Error executing command.",true);
-                reset();
-                return false;
-            }
+            try {
+                if (Utils.isErrorMsg(message)) {
+                    pendingMessage = "[InvView] Error executing command.";
+                    reset();
+                    return false;
+                }
+            } catch (Exception ignored) {};
 
             lastResponse = System.currentTimeMillis();
 
@@ -119,12 +123,18 @@ public class ChatListener {
             return false;
         });
 
+        ClientSendMessageEvents.ALLOW_COMMAND.register(cmd -> !cmd.startsWith("minecraft:data get entity") && !cmd.startsWith("data get entity"));
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (pendingMessage != null) {
+                Utils.msg(pendingMessage,true);
+                pendingMessage = null;
+            }
+
             if (pendingPlayer == null) return;
 
-            if (System.currentTimeMillis() - lastResponse > 5000) {
-                Utils.msg("[InvView] Server didn't return command data.", true);
-
+            if (System.currentTimeMillis() - lastResponse > 2000) {
+                pendingMessage = "[InvView] Server didn't return command data.";
                 reset();
             }
         });
@@ -151,7 +161,7 @@ public class ChatListener {
         }
 
         if (raw.contains(NO_DATA)) {
-            Utils.msg("[InvView] empty inventory", true);
+            pendingMessage = "[InvView] empty inventory";
             return true;
         }
 

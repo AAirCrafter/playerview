@@ -8,6 +8,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Style;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -28,6 +31,15 @@ public class EnderChestListener {
     public static void register() {
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
             if (pendingPlayer == null) return true;
+
+            try {
+                Style style = message.getStyle();
+                if (style.getColor() != null && style.getColor().equals(TextColor.fromFormatting(Formatting.RED))) {
+                    Utils.msg("[InvView] Error executing command.",true);
+                    pendingPlayer = null;
+                    return false;
+                }
+            } catch (Exception ignored) {};
 
             String raw = message.getString();
             Matcher m = LIST_PATTERN.matcher(raw);
