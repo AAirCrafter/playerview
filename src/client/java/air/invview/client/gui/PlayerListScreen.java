@@ -10,9 +10,12 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.GameMode;
 
 import java.util.Objects;
 
@@ -41,7 +44,7 @@ public class PlayerListScreen extends Screen {
                 String playername;
                 playername = player.getProfile().name();
 
-                list.addPlayerEntry(playername);
+                list.addPlayerEntry(playername,player.getGameMode().toString() != null ? player.getGameMode().toString() : "unknown");
             }
         }
 
@@ -52,7 +55,8 @@ public class PlayerListScreen extends Screen {
         list.clearEntries();
         for (PlayerListEntry player : Utils.getOnlinePlayers()) {
             String name = player.getProfile().name();
-            if (name.toLowerCase().contains(query.toLowerCase())) list.addPlayerEntry(name);
+            String gamemode = player.getGameMode().asString();
+            if (name.toLowerCase().contains(query.toLowerCase())) list.addPlayerEntry(name, gamemode != null ? gamemode : "unknown");
         }
     }
 
@@ -88,8 +92,8 @@ public class PlayerListScreen extends Screen {
             context.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), 0x10000000);
         }
 
-        public void addPlayerEntry(String name) {
-            this.addEntry(new PlayerEntry(name));
+        public void addPlayerEntry(String name, String gamemode) {
+            this.addEntry(new PlayerEntry(name, gamemode));
         }
 
         public void clearEntries() {
@@ -99,10 +103,12 @@ public class PlayerListScreen extends Screen {
 
     private static class PlayerEntry extends AlwaysSelectedEntryListWidget.Entry<PlayerEntry> {
         private final String name;
+        private final String gamemode;
         private final PlayerListEntry playerEntry;
 
-        public PlayerEntry(String name) {
+        public PlayerEntry(String name, String gamemode) {
             this.name = name;
+            this.gamemode = gamemode;
             PlayerListEntry found = null;
             for (PlayerListEntry player : Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerList()) {
                 String n = player.getProfile().name();
@@ -162,6 +168,15 @@ public class PlayerListScreen extends Screen {
                     0xFFFFFFFF
             );
 
+            int iconX = x + this.getWidth() - 20;
+            int iconY = y + (this.getHeight() - 16) / 2;
+
+            context.drawItem(getGamemodeIcon(gamemode), x + this.getWidth() - 20, y + (this.getHeight() - 16) / 2);
+
+            if (mouseX >= iconX && mouseX < iconX + 12 && mouseY >= iconY && mouseY < iconY + 12) {
+                context.drawTooltip(MinecraftClient.getInstance().textRenderer, Text.literal(gamemode), mouseX, mouseY);
+            }
+
             context.fill(x + 5, y + this.getHeight() - 1, x + this.getWidth() - 5, y + this.getHeight(), 0x30FFFFFF);
         }
 
@@ -176,5 +191,15 @@ public class PlayerListScreen extends Screen {
         public Text getNarration() {
             return Text.literal(name);
         }
+    }
+
+    private static ItemStack getGamemodeIcon(String gamemode) {
+        return switch (gamemode.toLowerCase()) {
+            case "survival" -> new ItemStack(Items.IRON_SWORD);
+            case "creative" -> new ItemStack(Items.GRASS_BLOCK);
+            case "adventure" -> new ItemStack(Items.MAP);
+            case "spectator" -> new ItemStack(Items.ENDER_EYE);
+            default -> new ItemStack(Items.BARRIER);
+        };
     }
 }
