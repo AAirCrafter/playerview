@@ -1,6 +1,7 @@
 package air.invview.client.mixin;
 
 import air.invview.client.gui.PlayerListScreen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +21,7 @@ public abstract class GlowingEntity {
         var entity = (LivingEntity)(Object) this;
 
         if (entity instanceof PlayerEntity player) {
+            if (!(MinecraftClient.getInstance().currentScreen instanceof PlayerListScreen)) return;
             if (PlayerListScreen.hoveredPlayer == null) return;
             if (PlayerListScreen.hoveredPlayer.getProfile().id().equals(player.getUuid())) cir.setReturnValue(true);
         }

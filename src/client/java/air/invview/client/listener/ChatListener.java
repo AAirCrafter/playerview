@@ -26,7 +26,7 @@ public class ChatListener {
         HUNGER
     }
 
-    public static final Pattern INVENTORY_RESULT = Pattern.compile("(\\[.*?]|\\{.*?})",Pattern.DOTALL);
+    public static final Pattern INVENTORY_RESULT = Pattern.compile("(\\[.*])",Pattern.DOTALL);
 
     public static final Pattern LIST_PATTERN = Pattern.compile("(\\[.*\\])", Pattern.DOTALL);
     public static final Pattern COMPOUND_PATTERN = Pattern.compile("(\\{.*\\})", Pattern.DOTALL);
@@ -66,13 +66,13 @@ public class ChatListener {
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
             if (pendingPlayer == null) return true;
 
-            try {
+            /*try {
                 if (Utils.isErrorMsg(message)) {
                     pendingMessage = "[InvView] Error executing command.";
                     reset();
                     return false;
                 }
-            } catch (Exception ignored) {};
+            } catch (Exception ignored) {};*/
 
             lastResponse = System.currentTimeMillis();
 
@@ -149,7 +149,7 @@ public class ChatListener {
     }
 
     private static boolean handleInventory(String raw) {
-        if (!raw.contains("{") || !raw.contains("}")) return false;
+        if (!raw.contains("{") || !raw.contains("}")) return true;
 
         Matcher m = INVENTORY_RESULT.matcher(raw);
 
@@ -163,11 +163,11 @@ public class ChatListener {
             return true;
         }
 
-        return false;
+        return true;
     }
 
     private static boolean handleEquipment(String raw) {
-        if (!raw.contains("{") || !raw.contains("}")) return false;
+        if (!raw.contains("{") || !raw.contains("}")) return true;
 
         Matcher m = COMPOUND_PATTERN.matcher(raw);
 
@@ -179,10 +179,12 @@ public class ChatListener {
         for (int slot : new int[]{36, 37, 38, 39, 40}) {
             if (slot < pendingItems.size()) pendingItems.set(slot, ItemStack.EMPTY);
         }
+
         return true;
     }
 
     private static boolean handleHealth(String raw) {
+        if (!raw.startsWith(pendingPlayer)) return false;
         Matcher m = FLOAT_PATTERN.matcher(raw);
 
         if (m.find()) {
@@ -190,10 +192,11 @@ public class ChatListener {
             return true;
         }
 
-        return raw.contains(NO_DATA);
+        return true;
     }
 
     private static boolean handleArmor(String raw) {
+        if (!raw.startsWith(pendingPlayer)) return false;
         Matcher m = INT_PATTERN.matcher(raw);
 
         if (m.find()) {
@@ -201,21 +204,11 @@ public class ChatListener {
             return true;
         }
 
-        return raw.contains(NO_DATA);
-    }
-
-    private static boolean handleXP(String raw) {
-        Matcher m = INT_PATTERN.matcher(raw);
-
-        if (m.find()) {
-            pendingXP = Integer.parseInt(m.group(1));
-            return true;
-        }
-
-        return raw.contains(NO_DATA);
+        return true;
     }
 
     private static boolean handleHunger(String raw) {
+        if (!raw.startsWith(pendingPlayer)) return false;
         Matcher m = INT_PATTERN.matcher(raw);
 
         if (m.find()) {
@@ -223,7 +216,19 @@ public class ChatListener {
             return true;
         }
 
-        return raw.contains(NO_DATA);
+        return true;
+    }
+
+    private static boolean handleXP(String raw) {
+        if (!raw.startsWith(pendingPlayer)) return false;
+        Matcher m = INT_PATTERN.matcher(raw);
+
+        if (m.find()) {
+            pendingXP = Integer.parseInt(m.group(1));
+            return true;
+        }
+
+        return true;
     }
 
     private static void finish() {
@@ -247,7 +252,7 @@ public class ChatListener {
     }
 
     public static void send(String cmd) {
-        var client = MinecraftClient.getInstance();
+        MinecraftClient client = MinecraftClient.getInstance();
 
         if (client == null || client.getNetworkHandler() == null) return;
 

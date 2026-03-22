@@ -37,7 +37,7 @@ public class PlayerInvScreen extends Screen {
     private final String playerName;
     private final List<ItemStack> items;
     private final float health;
-    private final int armor;
+    //private final int armor;
     private final int xp;
     private final int hunger;
     private final int[] armorSlots = {39, 38, 37, 36};
@@ -52,7 +52,7 @@ public class PlayerInvScreen extends Screen {
         this.playerName = playerName;
         this.items = items;
         this.health = health;
-        this.armor = armor;
+        //this.armor = armor;
         this.xp = xpLevel;
         this.hunger = hunger;
     }
@@ -87,7 +87,7 @@ public class PlayerInvScreen extends Screen {
 
         context.drawText(this.textRenderer,name,textx, y - 10,0xFFFFFFFF,true);
         renderHealth(context);
-        renderArmor(context);
+        //renderArmor(context);
         renderXP(context);
         renderHunger(context);
 
@@ -103,7 +103,7 @@ public class PlayerInvScreen extends Screen {
         if (world != null) {
             for (var p : world.getPlayers()) {
                 if (p.getName().getString().equals(playerName)) {
-                    InventoryScreen.drawEntity(context,x + 30, y + 10,x + 75, y + 75,30,0.0f,0.0f, 0.0f,p);
+                    InventoryScreen.drawEntity(context,x + 25, y + 10,x + 75, y + 75,30,0.0f,mouseX, mouseY,p);
                     break;
                 }
             }
@@ -204,6 +204,19 @@ public class PlayerInvScreen extends Screen {
         context.drawText(textRenderer,Text.literal("?"),x + 90, y + 20, Colors.WHITE,true);
     }
 
+    private void renderHunger(DrawContext context) {
+        context.drawTexture(
+                RenderPipelines.GUI_TEXTURED,
+                FOOD_TEXTURE,
+                x + 80, y + 20,
+                0, 0,
+                8, 8,
+                8, 8
+        );
+
+        context.drawText(textRenderer,Text.literal(String.valueOf(hunger)),x + 90, y + 20, Colors.WHITE,true);
+    }
+
     private void renderXP(DrawContext context) {
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
@@ -215,19 +228,6 @@ public class PlayerInvScreen extends Screen {
         );
 
         context.drawText(textRenderer,Text.literal(String.valueOf(xp)),x + 90, y + 30, Colors.WHITE,true);
-    }
-
-    private void renderHunger(DrawContext context) {
-        context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
-                FOOD_TEXTURE,
-                x + 80, y + 40,
-                0, 0,
-                8, 8,
-                8, 8
-        );
-
-        context.drawText(textRenderer,Text.literal(String.valueOf(hunger)),x + 90, y + 40, Colors.WHITE,true);
     }
 
     private void openEnderChest(String playerName) {

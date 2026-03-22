@@ -2,6 +2,7 @@ package air.invview.client.listener;
 
 import air.invview.client.Utils;
 import air.invview.client.gui.PlayerEnderChestScreen;
+import air.invview.client.gui.PlayerInvScreen;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
@@ -70,17 +71,12 @@ public class EnderChestListener {
             NbtElement parsed = StringNbtReader.fromOps(NbtOps.INSTANCE).read(nbtString);
             if (!(parsed instanceof NbtList list)) return items;
 
-            for (int i = 0; i < list.size(); i++) {
-                if (!(list.get(i) instanceof NbtCompound tag)) continue;
+            for (NbtElement nbtElement : list) {
+                if (!(nbtElement instanceof NbtCompound tag)) continue;
 
                 int slot = tag.getByte("Slot").orElse((byte) 0) & 0xFF;
-                String id = tag.getString("id").orElse("");
-                int count = tag.getInt("count").orElse(1);
-
-                if (id.isEmpty()) continue;
-
-                var item = Registries.ITEM.get(Identifier.of(id));
-                if (slot < items.size()) items.set(slot, new ItemStack(item, count));
+                ItemStack item = PlayerInvScreen.readStack(tag);
+                if (slot < items.size()) items.set(slot, item);
             }
         } catch (CommandSyntaxException e) {
             System.err.println("[InvView] EnderChest parse error: " + e.getMessage());

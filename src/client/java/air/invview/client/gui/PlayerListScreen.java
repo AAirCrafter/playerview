@@ -65,7 +65,7 @@ public class PlayerListScreen extends Screen {
 
         @Override
         protected void drawMenuListBackground(DrawContext context) {
-            context.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), 0x20000000);
+            context.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), 0x10000000);
         }
 
         public void addPlayerEntry(String name) {
@@ -144,6 +144,7 @@ public class PlayerListScreen extends Screen {
 
         @Override
         public boolean mouseClicked(Click click, boolean doubled) {
+            hoveredPlayer = null;
             ViewInvCommand.openFor(name);
             return true;
         }

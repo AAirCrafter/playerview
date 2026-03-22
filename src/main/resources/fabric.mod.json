@@ -25,7 +25,8 @@
     "AAirCrafter"
   ],
   "contributors": [
-    "GameTimeDario"
+    "GameTimeDario",
+    "SimPell"
   ],
   "icon": "assets/invview/icon.png",
   "environment": "client",
