@@ -3,7 +3,7 @@
   "id": "invview",
   "version": "${version}",
   "name": "playerview",
-  "description": "allows you to view other player's stats, inventorys and enderchest",
+  "description": "allows you to view other player's stats, inventories and enderchest",
   "custom": {
     "modmenu": {
       "links": {
@@ -16,14 +16,17 @@
       "update_checker": true
     }
   },
-  "authors": [
-    "AAirCrafter"
-  ],
   "contact": {
     "homepage": "https://www.aaircrafter.online",
     "issues": "https://github.com/AAirCrafter/Challenge-Timer/issues"
   },
   "license": "All rights reserved",
+  "authors": [
+    "AAirCrafter"
+  ],
+  "contributors": [
+    "GameTimeDario"
+  ],
   "icon": "assets/invview/icon.png",
   "environment": "client",
   "entrypoints": {

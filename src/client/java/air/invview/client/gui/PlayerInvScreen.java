@@ -1,7 +1,6 @@
 package air.invview.client.gui;
 
 import air.invview.client.ViewInvCommand;
-import air.invview.client.listener.ChatListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
@@ -25,12 +24,10 @@ import java.util.List;
 
 public class PlayerInvScreen extends Screen {
     private static final Identifier TEXTURE = Identifier.of("invview", "textures/gui/inv.png");
-    private static final Identifier HEART_CONTAINER_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/heart/container.png");
-    private static final Identifier HEART_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/heart/full.png");
-    private static final Identifier XP_TEXTURE = Identifier.of("invview", "textures/xporb.png");
-    private static final Identifier ARMOR_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/armor_full.png");
-    private static final Identifier FOOD_CONTAINER_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/food_empty.png");
-    private static final Identifier FOOD_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/food_full.png");
+    private static final Identifier HEART_TEXTURE = Identifier.of("invview", "textures/heart.png");
+    private static final Identifier XP_TEXTURE = Identifier.of("invview", "textures/xp_bottle.png");
+    private static final Identifier ARMOR_TEXTURE = Identifier.of("invview", "textures/armor.png");
+    private static final Identifier FOOD_TEXTURE = Identifier.of("invview", "textures/food.png");
     private static final Identifier BOOTSPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/boots.png");
     private static final Identifier LEGGINGSPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/leggings.png");
     private static final Identifier CHESTPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/chestplate.png");
@@ -183,15 +180,6 @@ public class PlayerInvScreen extends Screen {
     private void renderHealth(DrawContext context) {
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
-                HEART_CONTAINER_TEXTURE,
-                x + 80, y + 10,
-                0, 0,
-                8, 8,
-                8, 8
-        );
-
-        context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
                 HEART_TEXTURE,
                 x + 80, y + 10,
                 0, 0,
@@ -199,7 +187,7 @@ public class PlayerInvScreen extends Screen {
                 8, 8
         );
 
-        context.drawText(textRenderer,Text.literal(String.valueOf((float) Math.round(health) / 2)),x + 90, y + 10, Colors.RED,true);
+        context.drawText(textRenderer,Text.literal(String.valueOf((float) Math.round(health) / 2)),x + 90, y + 10, Colors.WHITE,true);
     }
 
     private void renderArmor(DrawContext context) {
@@ -213,7 +201,7 @@ public class PlayerInvScreen extends Screen {
         );
 
         //context.drawText(textRenderer,Text.literal(String.valueOf(armor)),x + 90, y + 20, Colors.LIGHT_GRAY,true);
-        context.drawText(textRenderer,Text.literal("?"),x + 90, y + 20, Colors.LIGHT_GRAY,true);
+        context.drawText(textRenderer,Text.literal("?"),x + 90, y + 20, Colors.WHITE,true);
     }
 
     private void renderXP(DrawContext context) {
@@ -226,19 +214,10 @@ public class PlayerInvScreen extends Screen {
                 8, 8
         );
 
-        context.drawText(textRenderer,Text.literal(String.valueOf(xp)),x + 90, y + 30, 0xFFFEFE00,true);
+        context.drawText(textRenderer,Text.literal(String.valueOf(xp)),x + 90, y + 30, Colors.WHITE,true);
     }
 
     private void renderHunger(DrawContext context) {
-        context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
-                FOOD_CONTAINER_TEXTURE,
-                x + 80, y + 40,
-                0, 0,
-                8, 8,
-                8, 8
-        );
-
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
                 FOOD_TEXTURE,
@@ -248,7 +227,7 @@ public class PlayerInvScreen extends Screen {
                 8, 8
         );
 
-        context.drawText(textRenderer,Text.literal(String.valueOf(hunger)),x + 90, y + 40, 0xFFB88458,true);
+        context.drawText(textRenderer,Text.literal(String.valueOf(hunger)),x + 90, y + 40, Colors.WHITE,true);
     }
 
     private void openEnderChest(String playerName) {
