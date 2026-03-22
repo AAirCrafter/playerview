@@ -108,7 +108,6 @@ public class PlayerInvScreen extends Screen {
                 }
             }
         }
-
     }
 
     private void renderItems(DrawContext context, int mouseX, int mouseY) {

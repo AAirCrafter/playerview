@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class PlayerListScreen extends Screen {
     private PlayerListWidget list;
     public static PlayerListEntry hoveredPlayer;
+    private TextFieldWidget searchField;
 
     public PlayerListScreen() {
         super(Text.literal("Players"));
@@ -25,7 +27,14 @@ public class PlayerListScreen extends Screen {
 
     @Override
     protected void init() {
-        list = new PlayerListWidget(client, width, height, 0, height, 0);
+        searchField = new TextFieldWidget(textRenderer, width / 2 - 100, 5, 200, 15, Text.literal("Search"));
+        searchField.setChangedListener(this::updateList);
+        searchField.setDrawsBackground(false);
+        searchField.setEditableColor(0xFFFFFFFF);
+        addDrawableChild(searchField);
+        setInitialFocus(searchField);
+
+        list = new PlayerListWidget(client, width, height, 20, height, 0);
 
         if (client != null && client.world != null) {
             for (PlayerListEntry player : Utils.getOnlinePlayers()) {
@@ -39,11 +48,22 @@ public class PlayerListScreen extends Screen {
         addDrawableChild(list);
     }
 
+    private void updateList(String query) {
+        list.clearEntries();
+        for (PlayerListEntry player : Utils.getOnlinePlayers()) {
+            String name = player.getProfile().name();
+            if (name.toLowerCase().contains(query.toLowerCase())) list.addPlayerEntry(name);
+        }
+    }
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+        context.fill(
+                searchField.getX() - 2,searchField.getY() - 3,
+                searchField.getX() + searchField.getWidth(), searchField.getY() + searchField.getHeight() - 3,
+                0x30FFFFFF);
 
-        //context.drawText(textRenderer,Text.literal("test"), 0,0,0xFFFFFFFF,true);
+        super.render(context, mouseX, mouseY, delta);
     }
 
 
@@ -71,6 +91,10 @@ public class PlayerListScreen extends Screen {
         public void addPlayerEntry(String name) {
             this.addEntry(new PlayerEntry(name));
         }
+
+        public void clearEntries() {
+            super.clearEntries();
+        }
     }
 
     private static class PlayerEntry extends AlwaysSelectedEntryListWidget.Entry<PlayerEntry> {
@@ -94,14 +118,13 @@ public class PlayerListScreen extends Screen {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+            hoveredPlayer = null;
             int x = this.getX();
             int y = this.getY();
 
             if (hovered) {
                 context.fill(x, y, x + this.getWidth(), y + this.getHeight(), 0x30FFFFFF);
                 hoveredPlayer = playerEntry;
-            } else {
-                hoveredPlayer = null;
             }
 
             if (playerEntry != null) {
