@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class Utils {
     public static void msg(String msg, boolean err) {
-        assert MinecraftClient.getInstance().player != null;
+        if (MinecraftClient.getInstance().player == null) return;
         MinecraftClient.getInstance().player.sendMessage(Text.literal(msg).formatted(err ? Formatting.RED : Formatting.RESET), false);
     }
 

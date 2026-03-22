@@ -2,11 +2,28 @@
   "schemaVersion": 1,
   "id": "invview",
   "version": "${version}",
-  "name": "invview",
-  "description": "allows you to view other player's inventorys and enderchest",
-  "authors": [],
-  "contact": {},
-  "license": "All-Rights-Reserved",
+  "name": "playerview",
+  "description": "allows you to view other player's stats, inventorys and enderchest",
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://dc.aircrafter.cloud",
+        "modmenu.source": "https://github.com/AAirCrafter/playerview",
+        "modmenu.modrinth": "https://modrinth.com/mod/challengetimer",
+        "PlanetMC": "https://www.planetminecraft.com/mod/challenge-timer-fabric/",
+        "modmenu.youtube": "https://www.youtube.com/@aaircrafter"
+      },
+      "update_checker": true
+    }
+  },
+  "authors": [
+    "AAirCrafter"
+  ],
+  "contact": {
+    "homepage": "https://www.aaircrafter.online",
+    "issues": "https://github.com/AAirCrafter/Challenge-Timer/issues"
+  },
+  "license": "All rights reserved",
   "icon": "assets/invview/icon.png",
   "environment": "client",
   "entrypoints": {
@@ -28,7 +45,7 @@
     }
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=0.15.0",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}"
   }

@@ -52,6 +52,12 @@ public class PlayerListScreen extends Screen {
         return false;
     }
 
+    @Override
+    public void close() {
+        hoveredPlayer = null;
+        super.close();
+    }
+
     private static class PlayerListWidget extends AlwaysSelectedEntryListWidget<PlayerEntry> {
         public PlayerListWidget(MinecraftClient client, int w, int h, int top, int bottom, int itemH) {
             super(client, w, h, top, bottom);

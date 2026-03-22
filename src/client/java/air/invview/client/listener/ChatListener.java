@@ -9,10 +9,6 @@ import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -47,10 +43,9 @@ public class ChatListener {
     private static int pendingXP = 0;
     private static int pendingHunger = 20;
     private static String pendingMessage;
+    private static long lastResponse = 0;
 
     private static Step step = Step.INVENTORY;
-
-    private static long lastResponse = 0;
 
     public static void setPendingPlayer(String name) {
         pendingPlayer = name;
@@ -123,7 +118,10 @@ public class ChatListener {
             return false;
         });
 
-        ClientSendMessageEvents.ALLOW_COMMAND.register(cmd -> !cmd.startsWith("minecraft:data get entity") && !cmd.startsWith("data get entity"));
+        ClientSendMessageEvents.ALLOW_COMMAND.register(cmd -> {
+            //if (pendingPlayer != null) return !cmd.contains("data get entity");
+            return true;
+        });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (pendingMessage != null) {
@@ -133,7 +131,7 @@ public class ChatListener {
 
             if (pendingPlayer == null) return;
 
-            if (System.currentTimeMillis() - lastResponse > 2000) {
+            if (System.currentTimeMillis() - lastResponse > 1000) {
                 pendingMessage = "[InvView] Server didn't return command data.";
                 reset();
             }

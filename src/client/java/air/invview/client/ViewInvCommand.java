@@ -35,7 +35,7 @@ public class ViewInvCommand {
 
         try {
             ChatListener.setPendingPlayer(playerName);
-            ChatListener.send("minecraft:data get entity " + playerName + " Inventory");
+            ChatListener.send("data get entity " + playerName + " Inventory");
         } catch (Exception e) {
             client.player.sendMessage(Text.literal("[INVVIEW] Failed to execute command").formatted(Formatting.RED),false);
         }
@@ -49,7 +49,7 @@ public class ViewInvCommand {
 
         try {
             EnderChestListener.setPendingPlayer(playerName);
-            client.getNetworkHandler().sendChatCommand("minecraft:data get entity " + playerName + " EnderItems");
+            client.getNetworkHandler().sendChatCommand("data get entity " + playerName + " EnderItems");
         } catch (Exception e) {
             client.player.sendMessage(Text.literal("[INVVIEW] Failed to execute command").formatted(Formatting.RED),false);
         }
