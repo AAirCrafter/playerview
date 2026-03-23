@@ -1,10 +1,10 @@
-package air.invview.client;
+package air.playerview.client;
 
-import air.invview.client.listener.ChatListener;
-import air.invview.client.listener.EnderChestListener;
+import air.playerview.client.listener.ChatListener;
+import air.playerview.client.listener.EnderChestListener;
 import net.fabricmc.api.ClientModInitializer;
 
-public class InvviewClient implements ClientModInitializer {
+public class PlayerViewClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {

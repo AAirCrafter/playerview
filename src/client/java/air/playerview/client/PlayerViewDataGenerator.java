@@ -1,9 +1,9 @@
-package air.invview.client;
+package air.playerview.client;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
-public class InvviewDataGenerator implements DataGeneratorEntrypoint {
+public class PlayerViewDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {

@@ -1,7 +1,7 @@
-package air.invview.client.gui;
+package air.playerview.client.gui;
 
-import air.invview.client.Utils;
-import air.invview.client.ViewInvCommand;
+import air.playerview.client.Utils;
+import air.playerview.client.ViewInvCommand;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.Click;
@@ -15,7 +15,6 @@ import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.GameMode;
 
 import java.util.Objects;
 

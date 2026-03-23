@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "invview",
+  "id": "playerview",
   "version": "${version}",
   "name": "playerview",
   "description": "allows you to view other player's stats, inventories and enderchest",
@@ -28,23 +28,23 @@
     "GameTimeDario",
     "SimPell"
   ],
-  "icon": "assets/invview/icon.png",
+  "icon": "assets/playerview/icon.png",
   "environment": "client",
   "entrypoints": {
     "fabric-datagen": [
-      "air.invview.client.InvviewDataGenerator"
+      "air.playerview.client.PlayerViewDataGenerator"
     ],
     "client": [
-      "air.invview.client.InvviewClient"
+      "air.playerview.client.PlayerViewClient"
     ],
     "main": [
-      "air.invview.Invview"
+      "air.playerview.PlayerView"
     ]
   },
   "mixins": [
-    "invview.mixins.json",
+    "playerview.mixins.json",
     {
-      "config": "invview.client.mixins.json",
+      "config": "playerview.client.mixins.json",
       "environment": "client"
     }
   ],

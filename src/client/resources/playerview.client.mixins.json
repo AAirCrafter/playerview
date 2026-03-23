@@ -1,9 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "air.invview.mixin",
+  "package": "air.playerview.client.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
+  "client": [
+    "GlowingEntity"
   ],
   "injectors": {
     "defaultRequire": 1

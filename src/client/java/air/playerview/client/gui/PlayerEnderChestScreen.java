@@ -1,6 +1,6 @@
-package air.invview.client.gui;
+package air.playerview.client.gui;
 
-import air.invview.client.ViewInvCommand;
+import air.playerview.client.ViewInvCommand;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 public class PlayerEnderChestScreen extends Screen {
-    private static final Identifier TEXTURE = Identifier.of("invview", "textures/gui/enderchest.png");
+    private static final Identifier TEXTURE = Identifier.of("playerview", "textures/gui/enderchest.png");
 
     private final String playerName;
     private final List<ItemStack> items;

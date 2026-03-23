@@ -1,6 +1,6 @@
-package air.invview.client.mixin;
+package air.playerview.client.mixin;
 
-import air.invview.client.gui.PlayerListScreen;
+import air.playerview.client.gui.PlayerListScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

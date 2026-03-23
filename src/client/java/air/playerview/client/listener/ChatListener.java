@@ -1,7 +1,7 @@
-package air.invview.client.listener;
+package air.playerview.client.listener;
 
-import air.invview.client.Utils;
-import air.invview.client.gui.PlayerInvScreen;
+import air.playerview.client.Utils;
+import air.playerview.client.gui.PlayerInvScreen;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -14,16 +14,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static air.invview.client.gui.PlayerInvScreen.readStack;
+import static air.playerview.client.gui.PlayerInvScreen.readStack;
 
 public class ChatListener {
     private enum Step {
-        INVENTORY,
-        EQUIPMENT,
-        HEALTH,
-        ARMOR,
-        XP,
-        HUNGER
+        INVENTORY,EQUIPMENT,HEALTH,ARMOR,XP,HUNGER
     }
 
     public static final Pattern INVENTORY_RESULT = Pattern.compile("(\\[.*])",Pattern.DOTALL);

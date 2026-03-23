@@ -1,7 +1,7 @@
-package air.invview.client;
+package air.playerview.client;
 
-import air.invview.client.listener.ChatListener;
-import air.invview.client.listener.EnderChestListener;
+import air.playerview.client.listener.ChatListener;
+import air.playerview.client.listener.EnderChestListener;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;

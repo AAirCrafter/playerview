@@ -1,6 +1,6 @@
-package air.invview.client.gui;
+package air.playerview.client.gui;
 
-import air.invview.client.ViewInvCommand;
+import air.playerview.client.ViewInvCommand;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
@@ -23,11 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PlayerInvScreen extends Screen {
-    private static final Identifier TEXTURE = Identifier.of("invview", "textures/gui/inv.png");
-    private static final Identifier HEART_TEXTURE = Identifier.of("invview", "textures/heart.png");
-    private static final Identifier XP_TEXTURE = Identifier.of("invview", "textures/xp_bottle.png");
-    private static final Identifier ARMOR_TEXTURE = Identifier.of("invview", "textures/armor.png");
-    private static final Identifier FOOD_TEXTURE = Identifier.of("invview", "textures/food.png");
+    private static final Identifier TEXTURE = Identifier.of("playerview", "textures/gui/inv.png");
+    private static final Identifier HEART_TEXTURE = Identifier.of("playerview", "textures/heart.png");
+    private static final Identifier XP_TEXTURE = Identifier.of("playerview", "textures/xp_bottle.png");
+    private static final Identifier ARMOR_TEXTURE = Identifier.of("playerview", "textures/armor.png");
+    private static final Identifier FOOD_TEXTURE = Identifier.of("playerview", "textures/food.png");
     private static final Identifier BOOTSPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/boots.png");
     private static final Identifier LEGGINGSPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/leggings.png");
     private static final Identifier CHESTPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/chestplate.png");

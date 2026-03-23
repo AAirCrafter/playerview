@@ -1,24 +1,22 @@
-package air.invview.client.listener;
+package air.playerview.client.listener;
 
-import air.invview.client.Utils;
-import air.invview.client.gui.PlayerEnderChestScreen;
-import air.invview.client.gui.PlayerInvScreen;
+import air.playerview.client.Utils;
+import air.playerview.client.gui.PlayerEnderChestScreen;
+import air.playerview.client.gui.PlayerInvScreen;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.registry.Registries;
 import net.minecraft.text.Style;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import static air.invview.client.listener.ChatListener.LIST_PATTERN;
+import static air.playerview.client.listener.ChatListener.LIST_PATTERN;
 
 public class EnderChestListener {
     private static final String NO_DATA = "No element found";
