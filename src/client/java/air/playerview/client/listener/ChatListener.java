@@ -133,7 +133,6 @@ public class ChatListener {
 
         if (m.find()) {
             parseInventory(m.group(1));
-            System.out.println("[PLAYERVIEW] parsed inv");
             return true;
         }
 
@@ -147,7 +146,6 @@ public class ChatListener {
 
         if (m.find()) {
             parseEquipment(m.group(1));
-            System.out.println("[PLAYERVIEW] parsed equip");
             return true;
         }
 
@@ -164,7 +162,6 @@ public class ChatListener {
 
         if (m.find()) {
             pendingHealth = Float.parseFloat(m.group(1));
-            System.out.println("[PLAYERVIEW] parsed health");
             return true;
         }
 
@@ -177,7 +174,6 @@ public class ChatListener {
 
         if (m.find()) {
             pendingHunger = Integer.parseInt(m.group(1));
-            System.out.println("[PLAYERVIEW] parsed hunger");
             return true;
         }
 
@@ -190,7 +186,6 @@ public class ChatListener {
 
         if (m.find()) {
             pendingXP = Integer.parseInt(m.group(1));
-            System.out.println("[PLAYERVIEW] parsed xp");
             return true;
         }
 
