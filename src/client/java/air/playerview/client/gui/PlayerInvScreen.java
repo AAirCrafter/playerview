@@ -24,10 +24,11 @@ import java.util.List;
 
 public class PlayerInvScreen extends Screen {
     private static final Identifier TEXTURE = Identifier.of("playerview", "textures/gui/inv.png");
-    private static final Identifier HEART_TEXTURE = Identifier.of("playerview", "textures/heart.png");
-    private static final Identifier XP_TEXTURE = Identifier.of("playerview", "textures/xp_bottle.png");
-    private static final Identifier ARMOR_TEXTURE = Identifier.of("playerview", "textures/armor.png");
-    private static final Identifier FOOD_TEXTURE = Identifier.of("playerview", "textures/food.png");
+    private static final Identifier HEART_CONTAINER_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/heart/container.png");
+    private static final Identifier HEART_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/heart/full.png");
+    private static final Identifier XP_TEXTURE = Identifier.of("minecraft", "textures/item/experience_bottle.png");
+    private static final Identifier FOOD_CONTAINER_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/food_empty.png");
+    private static final Identifier FOOD_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/hud/food_full.png");
     private static final Identifier BOOTSPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/boots.png");
     private static final Identifier LEGGINGSPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/leggings.png");
     private static final Identifier CHESTPH_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot/chestplate.png");
@@ -37,7 +38,6 @@ public class PlayerInvScreen extends Screen {
     private final String playerName;
     private final List<ItemStack> items;
     private final float health;
-    //private final int armor;
     private final int xp;
     private final int hunger;
     private final int[] armorSlots = {39, 38, 37, 36};
@@ -47,12 +47,11 @@ public class PlayerInvScreen extends Screen {
 
     private int x, y;
 
-    public PlayerInvScreen(String playerName, List<ItemStack> items, float health, int armor, int xpLevel, int hunger) {
+    public PlayerInvScreen(String playerName, List<ItemStack> items, float health, int xpLevel, int hunger) {
         super(Text.literal(playerName + "'s Inventory"));
         this.playerName = playerName;
         this.items = items;
         this.health = health;
-        //this.armor = armor;
         this.xp = xpLevel;
         this.hunger = hunger;
     }
@@ -87,7 +86,6 @@ public class PlayerInvScreen extends Screen {
 
         context.drawText(this.textRenderer,name,textx, y - 10,0xFFFFFFFF,true);
         renderHealth(context);
-        //renderArmor(context);
         renderXP(context);
         renderHunger(context);
 
@@ -179,6 +177,15 @@ public class PlayerInvScreen extends Screen {
     private void renderHealth(DrawContext context) {
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
+                HEART_CONTAINER_TEXTURE,
+                x + 80, y + 10,
+                0, 0,
+                8, 8,
+                8, 8
+        );
+
+        context.drawTexture(
+                RenderPipelines.GUI_TEXTURED,
                 HEART_TEXTURE,
                 x + 80, y + 10,
                 0, 0,
@@ -189,21 +196,16 @@ public class PlayerInvScreen extends Screen {
         context.drawText(textRenderer,Text.literal(String.valueOf((float) Math.round(health) / 2)),x + 90, y + 10, Colors.WHITE,true);
     }
 
-    private void renderArmor(DrawContext context) {
+    private void renderHunger(DrawContext context) {
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
-                ARMOR_TEXTURE,
+                FOOD_CONTAINER_TEXTURE,
                 x + 80, y + 20,
                 0, 0,
                 8, 8,
                 8, 8
         );
 
-        //context.drawText(textRenderer,Text.literal(String.valueOf(armor)),x + 90, y + 20, Colors.LIGHT_GRAY,true);
-        context.drawText(textRenderer,Text.literal("?"),x + 90, y + 20, Colors.WHITE,true);
-    }
-
-    private void renderHunger(DrawContext context) {
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
                 FOOD_TEXTURE,
@@ -220,10 +222,10 @@ public class PlayerInvScreen extends Screen {
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
                 XP_TEXTURE,
-                x + 80, y + 30,
+                x + 79, y + 29,
                 0, 0,
-                8, 8,
-                8, 8
+                9, 9,
+                9, 9
         );
 
         context.drawText(textRenderer,Text.literal(String.valueOf(xp)),x + 90, y + 30, Colors.WHITE,true);

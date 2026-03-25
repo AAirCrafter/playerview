@@ -34,7 +34,7 @@ public class EnderChestListener {
             try {
                 Style style = message.getStyle();
                 if (style.getColor() != null && style.getColor().equals(TextColor.fromFormatting(Formatting.RED))) {
-                    Utils.msg("[InvView] Error executing command.",true);
+                    Utils.msg("Error executing command.",true);
                     pendingPlayer = null;
                     return false;
                 }
@@ -50,7 +50,7 @@ public class EnderChestListener {
 
                 MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new PlayerEnderChestScreen(player, items)));
             } else if (raw.contains(NO_DATA) || raw.contains("no elements")) {
-                Utils.msg("[InvView] empty enderchest", true);
+                Utils.msg("empty enderchest", true);
                 String player = pendingPlayer;
                 pendingPlayer = null;
 

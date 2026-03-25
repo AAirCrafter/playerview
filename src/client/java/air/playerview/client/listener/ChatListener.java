@@ -18,7 +18,7 @@ import static air.playerview.client.gui.PlayerInvScreen.readStack;
 
 public class ChatListener {
     private enum Step {
-        INVENTORY,EQUIPMENT,HEALTH,ARMOR,XP,HUNGER
+        INVENTORY,EQUIPMENT,HEALTH,XP,HUNGER
     }
 
     public static final Pattern INVENTORY_RESULT = Pattern.compile("(\\[.*])",Pattern.DOTALL);
@@ -28,13 +28,10 @@ public class ChatListener {
     public static final Pattern FLOAT_PATTERN = Pattern.compile("([\\d.]+)f?\\s*$");
     public static final Pattern INT_PATTERN = Pattern.compile("(\\d+)\\s*$");
 
-    public static final String NO_DATA = "No element found";
-
     private static String pendingPlayer;
     private static List<ItemStack> pendingItems;
 
     private static float pendingHealth = 20f;
-    private static int pendingArmor = 0;
     private static int pendingXP = 0;
     private static int pendingHunger = 20;
     private static String pendingMessage;
@@ -49,7 +46,6 @@ public class ChatListener {
         for (int i = 0; i < 41; i++) pendingItems.add(ItemStack.EMPTY);
 
         pendingHealth = 20f;
-        pendingArmor = 0;
         pendingXP = 0;
         pendingHunger = 20;
 
@@ -61,60 +57,48 @@ public class ChatListener {
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
             if (pendingPlayer == null) return true;
 
-            /*try {
-                if (Utils.isErrorMsg(message)) {
-                    pendingMessage = "[InvView] Error executing command.";
-                    reset();
-                    return false;
-                }
-            } catch (Exception ignored) {};*/
-
             lastResponse = System.currentTimeMillis();
 
             String raw = message.getString();
 
             switch (step) {
                 case INVENTORY -> {
-                    if (!handleInventory(raw)) return true;
+                    if (!handleInventory(raw)) return false;
                     step = Step.EQUIPMENT;
                     next();
                 }
 
                 case EQUIPMENT -> {
-                    if (!handleEquipment(raw)) return true;
+                    if (!handleEquipment(raw)) return false;
                     step = Step.HEALTH;
                     next();
                 }
 
                 case HEALTH -> {
-                    if (!handleHealth(raw)) return true;
+                    if (!handleHealth(raw)) return false;
                     //step = Step.ARMOR;
                     step = Step.XP;
                     next();
                 }
 
-                case ARMOR -> {
-                    if (!handleArmor(raw)) return true;
-                    step = Step.XP;
-                    next();
-                }
-
                 case XP -> {
-                    if (!handleXP(raw)) return true;
+                    if (!handleXP(raw)) return false;
                     step = Step.HUNGER;
                     next();
                 }
 
                 case HUNGER -> {
-                    if (!handleHunger(raw)) return true;
+                    if (!handleHunger(raw)) return false;
                     finish();
                 }
             }
+
             return false;
         });
 
         ClientSendMessageEvents.ALLOW_COMMAND.register(cmd -> {
-            //if (pendingPlayer != null) return !cmd.contains("data get entity");
+            /*System.out.println(cmd);
+            if (pendingPlayer != null) return cmd.contains("data get entity");*/
             return true;
         });
 
@@ -126,8 +110,8 @@ public class ChatListener {
 
             if (pendingPlayer == null) return;
 
-            if (System.currentTimeMillis() - lastResponse > 1000) {
-                pendingMessage = "[InvView] Server didn't return command data.";
+            if (System.currentTimeMillis() - lastResponse > 500) {
+                pendingMessage = "Server didn't return command data.";
                 reset();
             }
         });
@@ -137,7 +121,6 @@ public class ChatListener {
         switch (step) {
             case EQUIPMENT -> send("data get entity " + pendingPlayer + " equipment");
             case HEALTH -> send("data get entity " + pendingPlayer + " Health");
-            case ARMOR -> send("data get entity " + pendingPlayer + " ArmorPoints");
             case XP -> send("data get entity " + pendingPlayer + " XpLevel");
             case HUNGER -> send("data get entity " + pendingPlayer + " foodLevel");
         }
@@ -150,11 +133,6 @@ public class ChatListener {
 
         if (m.find()) {
             parseInventory(m.group(1));
-            return true;
-        }
-
-        if (raw.contains(NO_DATA)) {
-            pendingMessage = "[InvView] empty inventory";
             return true;
         }
 
@@ -179,7 +157,7 @@ public class ChatListener {
     }
 
     private static boolean handleHealth(String raw) {
-        if (!raw.startsWith(pendingPlayer)) return false;
+        if (!raw.contains(pendingPlayer)) return false;
         Matcher m = FLOAT_PATTERN.matcher(raw);
 
         if (m.find()) {
@@ -190,20 +168,8 @@ public class ChatListener {
         return true;
     }
 
-    private static boolean handleArmor(String raw) {
-        if (!raw.startsWith(pendingPlayer)) return false;
-        Matcher m = INT_PATTERN.matcher(raw);
-
-        if (m.find()) {
-            pendingArmor = Integer.parseInt(m.group(1));
-            return true;
-        }
-
-        return true;
-    }
-
     private static boolean handleHunger(String raw) {
-        if (!raw.startsWith(pendingPlayer)) return false;
+        if (!raw.contains(pendingPlayer)) return false;
         Matcher m = INT_PATTERN.matcher(raw);
 
         if (m.find()) {
@@ -231,13 +197,12 @@ public class ChatListener {
         List<ItemStack> items = pendingItems;
 
         float health = pendingHealth;
-        int armor = pendingArmor;
         int xp = pendingXP;
         int hunger = pendingHunger;
 
         reset();
 
-        MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new PlayerInvScreen(player, items, health, armor, xp, hunger)));
+        MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new PlayerInvScreen(player, items, health, xp, hunger)));
     }
 
     private static void reset() {

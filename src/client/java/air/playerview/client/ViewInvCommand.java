@@ -35,6 +35,7 @@ public class ViewInvCommand {
 
         try {
             ChatListener.setPendingPlayer(playerName);
+            //ChatListener.send("data get entity " + playerName + " Inventory");
             ChatListener.send("data get entity " + playerName + " Inventory");
         } catch (Exception e) {
             client.player.sendMessage(Text.literal("[INVVIEW] Failed to execute command").formatted(Formatting.RED),false);

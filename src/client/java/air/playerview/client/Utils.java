@@ -2,6 +2,7 @@ package air.playerview.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
@@ -15,7 +16,16 @@ import java.util.Objects;
 public class Utils {
     public static void msg(String msg, boolean err) {
         if (MinecraftClient.getInstance().player == null) return;
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(msg).formatted(err ? Formatting.RED : Formatting.RESET), false);
+
+        if (err) {
+            MinecraftClient.getInstance().getToastManager().add(new SystemToast(
+                    SystemToast.Type.PACK_LOAD_FAILURE,
+                    Text.literal("PlayerView Error"),
+                    Text.literal(msg)
+            ));
+        } else {
+            MinecraftClient.getInstance().player.sendMessage(Text.literal(msg), false);
+        }
     }
 
     public static Collection<PlayerListEntry> getOnlinePlayers() {
